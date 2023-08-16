@@ -1,18 +1,14 @@
-SELECT date_format(sales_date,'%Y-%m-%d') AS sales_date
-       , product_id
-       , user_id
-       , sales_amount
-FROM  
-     (SELECT sales_date, product_id, user_id, sales_amount
-      FROM online_sale AS n
-      UNION
-      SELECT sales_date, product_id, 
-             NULL AS user_id
-            ,sales_amount
-      from offline_sale AS f
-      ) AS nf
-WHERE left(sales_date,7) = '2022-03'
-ORDER BY  sales_date
-        , product_id 
-        , user_id
-#IFNULL(NULL,'NULL') AS user_id
+SELECT date_format(SALES_DATE, '%Y-%m-%d') as SALES_DATE, 
+       PRODUCT_ID, 
+       USER_ID, 
+       SALES_AMOUNT  
+from ONLINE_SALE
+where substring(SALES_DATE, 1, 7) = '2022-03'
+union all
+SELECT date_format(SALES_DATE, '%Y-%m-%d') as SALES_DATE, 
+       PRODUCT_ID, 
+       null as USER_ID, 
+       SALES_AMOUNT  
+from OFFLINE_SALE
+where substring(SALES_DATE, 1, 7) = '2022-03'
+order by SALES_DATE, PRODUCT_ID, USER_ID
