@@ -1,14 +1,12 @@
-SELECT date_format(SALES_DATE, '%Y-%m-%d') as SALES_DATE, 
-       PRODUCT_ID, 
-       USER_ID, 
-       SALES_AMOUNT  
-from ONLINE_SALE
-where substring(SALES_DATE, 1, 7) = '2022-03'
-union all
-SELECT date_format(SALES_DATE, '%Y-%m-%d') as SALES_DATE, 
-       PRODUCT_ID, 
-       null as USER_ID, 
-       SALES_AMOUNT  
-from OFFLINE_SALE
-where substring(SALES_DATE, 1, 7) = '2022-03'
-order by SALES_DATE, PRODUCT_ID, USER_ID
+SELECT date_format(SALES_DATE,'%Y-%m-%d') AS sales_date
+       , product_id
+       , user_id
+       , sales_amount
+UNION
+SELECT date_format(SALES_DATE,'%Y-%m-%d') AS sales_date
+       , product_id
+       , NULL AS user_id
+       , sales_amount
+from offline_sale AS f
+WHERE LEFT(SALES_DATE,7) = '2022-03'
+ORDER BY  SALES_DATE , product_id , user_id
