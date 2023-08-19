@@ -1,20 +1,12 @@
 -- 0819
-/*SELECT name
+SELECT name
       ,COUNT(name) AS COUNT 
 FROM animal_ins
 WHERE name IS NOT NULL
 GROUP BY name
 HAVING COUNT(name) > 1
-ORDER BY name*/
+ORDER BY name
 
--- 0819
-SELECT name
-      ,COUNT(*) AS COUNT 
-FROM animal_ins
-WHERE name IS NOT NULL
-GROUP BY name
-HAVING COUNT(*) > 1
-ORDER BY name ;
 
 
 /*SELECT NAME
