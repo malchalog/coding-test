@@ -1,22 +1,15 @@
-#0905 
+# 0905 하 처음에 user_id가 아니라 online_sale_id를 count하는 실수를 했음
 
-/*SELECT year(sales_date) 
-       , month(sales_date)
-       , COUNT(CASE WHEN o.online_sale_id IS NOT NULL THEN 1 END) AS perchased_users
-       , ROUND (COUNT(CASE WHEN o.online_sale_id IS NOT NULL THEN 1 END)
-         / 183,1) AS purchased_ratio
+
+SELECT   year(sales_date) AS YEAR
+       , month(sales_date) AS MONTH
+       , COUNT (distinct o.user_id)  AS PUCHASED_USERS  
+       , ROUND(COUNT (distinct o.user_id) / 158,1)
 FROM user_info AS i
-     LEFT JOIN online_sale AS o ON o.user_id = i.user_id
-WHERE LEFT(i.joined,4) = '2021' 
-GROUP BY year(sales_date) , month(sales_date)
-ORDER BY 1,2*/
-
-SELECT YEAR(sales_date),
-    MONTH(sales_date), 
-    count(DISTINCT O.USER_ID), 
-    ROUND(count(DISTINCT O.USER_ID)/(SELECT COUNT(USER_ID) FROM USER_INFO WHERE YEAR(JOINED) = 2021),1)
-FROM ONLINE_SALE O
-INNER JOIN USER_INFO U ON U.USER_ID = O.USER_ID
-WHERE YEAR(JOINED) = 2021
+     INNER JOIN online_sale AS o ON o.user_id = i.user_id
+WHERE LEFT(i.joined,4) = '2021'  
+      AND year(sales_date) IS NOT NULL 
 GROUP BY 1,2
-ORDER BY 1,2
+ORDER BY 1,2 ; 
+
+
