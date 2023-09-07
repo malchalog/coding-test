@@ -1,17 +1,16 @@
-WITH GET_CNT AS (
-    SELECT MEMBER_ID, COUNT(REST_ID) AS CNT
-    FROM REST_REVIEW
-    GROUP BY MEMBER_ID
-), GET_MEMBER_ID AS (
-    SELECT MEMBER_ID
-    FROM GET_CNT 
-    WHERE CNT = (
-        SELECT MAX(CNT) 
-        FROM GET_CNT
-    )
-)
-SELECT M.MEMBER_NAME, R.REVIEW_TEXT, DATE_FORMAT(R.REVIEW_DATE,'%Y-%m-%d')
-FROM MEMBER_PROFILE M
-INNER JOIN REST_REVIEW R ON M.MEMBER_ID = R.MEMBER_ID
-INNER JOIN GET_MEMBER_ID G ON M.MEMBER_ID = G.MEMBER_ID
+#0904 with문으로 풀기
+WITH cnt_review AS (
+                     SELECT member_id, COUNT(*) AS CNT
+                     FROM rest_review
+                     GROUP BY member_id) #한 멤버당 쓴 리뷰 수 
+    , max_review AS (
+                        SELECT MEMBER_ID
+                        FROM cnt_review
+                        WHERE CNT = (
+                                      SELECT MAX(CNT) #최대 리뷰 개수
+                                      FROM cnt_review ))                
+SELECT m.member_name,r.review_text,DATE_FORMAT(r.review_Date,'%Y-%m-%d')
+FROM member_profile AS m
+INNER JOIN rest_review AS r ON r.member_id = m.member_id
+INNER JOIN max_review mm ON mm.MEMBER_ID = m.MEMBER_ID
 ORDER BY R.REVIEW_DATE, R.REVIEW_TEXT
