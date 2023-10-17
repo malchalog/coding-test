@@ -1,0 +1,27 @@
+WITH recursive cte AS
+(
+ SELECT 2 as num
+ UNION ALL
+ SELECT num + 1
+ FROM cte as a
+ WHERE num < 1000)
+ 
+ SELECT group_concat(a.num separator '&')
+ FROM cte AS a
+ WHERE NOT EXISTS(
+       SELECT b.num
+       FROM cte as b
+       WHERE a.num % b.num = 0
+             AND a.num != b.num)
+
+#GROUP_CONCAT
+GROUP BY로 문자열을 합칠 때 사용한다
+GROUP_CONCAT(대상컬럼,  '구분자')
+
+로직
+1. 재귀문을 사용하여 숫자 테이블 생성
+2. &로 구분처리
+3. WHERE 절을 통한 소수가 아닌 수를 제외처리
+-A.NUM % B.NUM = 0 : A.NUM과 B.NUM의 나눈 나머지가 0이면 소수가 아니다.
+-A.NUM != B.NUM: 같은 숫자끼리 나누면 무조건 나머지가 0이 나온다. 그래서 같은 숫자는 제외해야한다. 
+
