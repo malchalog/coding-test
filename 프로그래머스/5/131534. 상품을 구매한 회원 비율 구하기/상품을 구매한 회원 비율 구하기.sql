@@ -7,4 +7,3 @@ FROM user_info AS u
 WHERE YEAR(u.JOINED) = '2021'
 GROUP BY  1,2
 ORDER BY  1,2 ASC
-
